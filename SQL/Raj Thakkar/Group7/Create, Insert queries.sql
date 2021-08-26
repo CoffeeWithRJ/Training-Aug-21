@@ -20,3 +20,12 @@ Obj_Name VARCHAR(30) NOT NULL,
 CONSTRAINT FK_Type_Id FOREIGN KEY([Type_Id]) REFERENCES OBJECT_MASTER([Type_Id])
 )
 
+-----------------------------------------------------------------------------------------------------------
+CREATE TABLE SUB_LOCATION
+(   
+    Loc_Id INT PRIMARY KEY IDENTITY(1,1),
+    Loc_Obj_Id INT NOT NULL,
+    Loc_Name VARCHAR(30) NOT NULL,
+    CONSTRAINT Chk_Loc_Obj_Id FOREIGN KEY (Loc_Obj_Id) REFERENCES OBJECT(Obj_Id)
+)
+
