@@ -118,3 +118,26 @@ CONSTRAINT FK_User_Id FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id]) ON
 CONSTRAINT chk_bus_seat_ FOREIGN KEY(Bus_Id) REFERENCES BUS(Bus_Id)
 )
 ------------------------------------------------------------------------------------------------------------------
+CREATE TABLE TICKETS
+(
+Ticket_Id INT PRIMARY KEY IDENTITY(1,1),
+Schedule_Id INT NOT NULL,
+Booked_Seat TINYINT NOT NULL,
+Ticket_Price DECIMAL(8,2) NOT NULL,
+Insurance Bit DEFAULT 0,
+Total_Cost  AS ( (Ticket_Price* Booked_Seat) +(Insurance * Booked_Seat * 5) + 5 ),
+[User_Id] INT NOT NULL,
+CONSTRAINT Schedule_FK FOREIGN KEY (Schedule_Id) REFERENCES TRAVEL_SCHEDULE(Schedule_Id),
+CONSTRAINT User_fk1 FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id])
+)
+------------------------------------------------------------------------------------------------------------------
+CREATE TABLE PAYMENT
+(
+    Payment_ID INT CONSTRAINT PAYMENT_PymentId_PK PRIMARY KEY IDENTITY(1,1),
+    Payment_type TINYINT NOT NULL,
+    Ticket_Id INT CONSTRAINT PAYMENT_TicketId_FK FOREIGN KEY REFERENCES TICKETS(Ticket_Id) NOT NULL,
+    Payment_Number VARCHAR(30) NOT NULL,
+    [User_Id] INT NOT NULL CONSTRAINT PAYMENT_UserId_FK FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id]),
+	CONSTRAINT Chk_Payment_type CHECK(Payment_type BETWEEN 12 AND 15)
+)
+------------------------------------------------------------------------------------------------------------------
