@@ -141,3 +141,20 @@ CREATE TABLE PAYMENT
 	CONSTRAINT Chk_Payment_type CHECK(Payment_type BETWEEN 12 AND 15)
 )
 ------------------------------------------------------------------------------------------------------------------
+CREATE TABLE BOOKING_DETAILS
+(
+Bd_Id INT IDENTITY PRIMARY KEY,
+Booking_Date DATE NOT NULL,
+Booking_Status BIT NOT NULL,
+Payment_ID INT NOT NULL UNIQUE CONSTRAINT FK_Payment FOREIGN KEY (Payment_Id) REFERENCES PAYMENT(Payment_Id)  ON DELETE CASCADE ON UPDATE CASCADE,
+Schedule_Id INT NOT NULL CONSTRAINT Schedule_FK0 FOREIGN KEY (Schedule_Id) REFERENCES TRAVEL_SCHEDULE(Schedule_Id) ON DELETE CASCADE ON UPDATE CASCADE,
+[User_Id] INT NOT NULL CONSTRAINT User_Fk11 FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id]) ON DELETE CASCADE ON UPDATE CASCADE
+)
+  
+-------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE CANCELLATION
+(
+    Cancellation_Id INT PRIMARY KEY IDENTITY(1,1),
+    Ticket_Id INT CONSTRAINT chk_ticket_cancel FOREIGN KEY (Ticket_Id) REFERENCES TICKETS(Ticket_Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    Bd_Id INT CONSTRAINT chk_bd_cancel FOREIGN KEY (Bd_Id) REFERENCES BOOKING_DETAILS(Bd_Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
+)
