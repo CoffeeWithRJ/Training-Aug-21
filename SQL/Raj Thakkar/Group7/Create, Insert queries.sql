@@ -58,3 +58,22 @@ CREATE TABLE BUS
 )
 
 ------------------------------------------------------------------------------------------------------------------
+CREATE TABLE SEAT
+(
+Seat_No TINYINT PRIMARY KEY IDENTITY(1,1),
+Seat_Type TINYINT NOT NULL ,
+Seat_Status BIT NOT NULL DEFAULT 0,
+Deck_Type TINYINT NOT NULL, 
+Bus_Id INT CONSTRAINT chk_bus_seat FOREIGN KEY(Bus_Id) REFERENCES BUS(Bus_Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
+)
+------------------------------------------------------------------------------------------------------------------
+CREATE TABLE DRIVER
+(
+    Driver_Id INT CONSTRAINT DRIVER_DriverId_PK PRIMARY KEY IDENTITY(1,1),
+    First_Name varchar(15) NOT NULL,
+    Last_Name varchar(15) NOT NULL,
+    Contact_No varchar(10) CONSTRAINT  DRIVER_ContactNo CHECK(Contact_No LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') NOT NULL,
+    Bus_Id INT CONSTRAINT BusId_FK FOREIGN KEY REFERENCES BUS(Bus_Id) NOT NULL
+)
+
+------------------------------------------------------------------------------------------------------------------
