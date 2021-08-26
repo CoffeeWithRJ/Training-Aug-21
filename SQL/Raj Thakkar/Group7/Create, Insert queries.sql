@@ -77,3 +77,44 @@ CREATE TABLE DRIVER
 )
 
 ------------------------------------------------------------------------------------------------------------------
+CREATE TABLE TRAVEL_SCHEDULE(
+Schedule_Id INT PRIMARY KEY IDENTITY(1,1),
+Bus_Id INT NOT NULL,
+DRIVER_Id INT NOT NULL,
+[Source] TINYINT NOT NULL,
+Starting_Point TINYINT NOT NULL,
+Destination TINYINT NOT NULL,
+Destination_Point TINYINT NOT NULL,
+Departure_Time TIME NOT NULL,
+Departure_Date DATE NOT NULL,
+Ticket_Price DECIMAL(8,2) NOT NULL,
+Available_Seats TINYINT,
+Rating DECIMAL(2,1),
+Travel_Status BIT NOT NULL,
+[User_Id] INT NOT NULL,
+CONSTRAINT Bus_Id_FK FOREIGN KEY (Bus_Id) REFERENCES BUS(Bus_Id) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT Chk_Source CHECK([Source] BETWEEN 16 AND 23),
+CONSTRAINT Chk_Starting_Point CHECK(Starting_Point BETWEEN 1 AND 61),
+CONSTRAINT Chk_Destination CHECK(Destination BETWEEN 16 AND 23),
+CONSTRAINT Chk_Destination_Point CHECK(Destination_Point BETWEEN 1 AND 61),
+CONSTRAINT DriverID_FK FOREIGN KEY (DRIVER_Id) REFERENCES DRIVER(Driver_Id) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT UserId_FK FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id])
+)
+
+------------------------------------------------------------------------------------------------------------------
+CREATE TABLE PASSENGER
+(
+Passenger_Id INT PRIMARY KEY IDENTITY(1,1),
+Passenger_Name VARCHAR(25) NOT NULL,
+Age TINYINT NOT NULL,
+Gender TINYINT NOT NULL,
+Seat_No TINYINT UNIQUE NOT NULL,
+[User_Id] INT NOT NULL,
+Bus_Id INT NOT NULL,
+Vaccination_status BIT NOT NULL,
+CONSTRAINT FK_Seat_No FOREIGN KEY (Seat_No) REFERENCES SEAT(Seat_No) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT Chk_Gender_ CHECK(Gender BETWEEN 1 AND 3),
+CONSTRAINT FK_User_Id FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id]) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT chk_bus_seat_ FOREIGN KEY(Bus_Id) REFERENCES BUS(Bus_Id)
+)
+------------------------------------------------------------------------------------------------------------------
