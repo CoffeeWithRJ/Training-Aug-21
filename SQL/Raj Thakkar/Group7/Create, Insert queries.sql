@@ -314,16 +314,44 @@ Total_Cost  AS ( (Ticket_Price* Booked_Seat) +(Insurance * Booked_Seat * 5) + 5 
 CONSTRAINT Schedule_FK FOREIGN KEY (Schedule_Id) REFERENCES TRAVEL_SCHEDULE(Schedule_Id),
 CONSTRAINT User_fk1 FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id])
 )
-------------------------------------------------------------------------------------------------------------------
+
+
+INSERT INTO TICKETS VALUES (1,4,210,1,1),
+                           (2,3,250,0,2),
+                           (3,1,500,1,3),
+                           (4,1,340,1,4),
+                           (5,1,270,0,5),
+                           (6,2,440,1,6),
+                           (7,6,530,1,7),
+                           (8,2,670,1,8),
+                           (9,1,870,0,9),
+                           (10,1,250,1,10)
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 CREATE TABLE PAYMENT
 (
     Payment_ID INT CONSTRAINT PAYMENT_PymentId_PK PRIMARY KEY IDENTITY(1,1),
     Payment_type TINYINT NOT NULL,
     Ticket_Id INT CONSTRAINT PAYMENT_TicketId_FK FOREIGN KEY REFERENCES TICKETS(Ticket_Id) NOT NULL,
     Payment_Number VARCHAR(30) NOT NULL,
+	Payment_Status BIT NOT NULL,
     [User_Id] INT NOT NULL CONSTRAINT PAYMENT_UserId_FK FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id]),
 	CONSTRAINT Chk_Payment_type CHECK(Payment_type BETWEEN 12 AND 15)
 )
+
+
+INSERT INTO PAYMENT VALUES (15,1,'MehulJ@ybl',1,1),
+                           (12,2,'4312643737309775',0,2),
+                           (15,3,'Kapadiya34@Paytm',0,3),
+                           (12,4,'5353257079899009',1,4),
+                           (14,5,'9456822415756695',1,5),
+                           (13,6,'5137413525823514',1,6),
+                           (15,7,'BarkhaM@sbi',0,7),
+                           (12,8,'5590567205496915',1,8),
+                           (15,9,'gandhi@gpay',1,9),
+                           (12,10,'4030861064360473',1,10)
+
 ------------------------------------------------------------------------------------------------------------------
 
  CREATE TABLE BOOKING_DETAILS
