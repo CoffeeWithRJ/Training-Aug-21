@@ -60,6 +60,68 @@ CREATE TABLE SUB_LOCATION
     CONSTRAINT Chk_Loc_Obj_Id FOREIGN KEY (Loc_Obj_Id) REFERENCES OBJECT(Obj_Id)
 )
 
+INSERT INTO SUB_LOCATION VALUES(16,'Paldi'),
+                               (16,'Geeta Mandir Bus Stand'),
+                               (16,'CTM Char Rasta'),
+                               (16,'Shahi Baug'),
+                               (16,'Satellite'),
+                               (16,'Iskon'),
+			       (16,'Krishnanagar Bus Stand'),
+			       (16,'Ranip Bus Stand'),
+			       (16,'Bapunagar Bus Stand'),
+                               (17,'Surat Central Bus station'),
+                               (17,'Udhna Bus Station'),
+                               (17,'Palsana Bus Station'),
+                               (17,'Kamrej Bus Station'),
+                               (17,'Kadodara Bus Station'),
+                               (17,'Bardoli Bus Station'),
+                               (18,'Rajkot Central Bus Stand'),
+                               (18,'Green Land Chokdi'),
+                               (18,'Indera Circle'),
+                               (18,'Moti Taki Chowk'),
+                               (18,'Bigbajar'),
+                               (18,'Limda Chowk'),
+                               (18,'Hospital Chowk'),
+                               (18,'Gondal Bus Station'),
+                               (18,'Virpur Bus Station'),
+                               (18,'Aatkot Bus Station'),
+                               (18,'Chotila Bus Station'),
+                               (18,'Jasdan Bus Station'),
+                               (19,'Vadodara Central Bus Station'),
+                               (19,'Amit Nagar'),
+                               (19,'Pandya Bridge'),
+                               (19,'Sussen Circle'),
+                               (19,'Lalbaug'),
+                               (19,'Golden Chokdi'),
+                               (20,'Bhavnagar Bus Station'),
+                               (20,'Shihor Bus Station'),
+                               (20,'Vallabhipur Bus Station'),
+                               (20,'Umrala Bus Station'),
+                               (20,'Botad Bus Station'),
+                               (20,'Mahuva Bus Station'),
+                               (20,'Talaja Bus Station'),
+                               (21,'Junagadh Bus Station'),
+                               (21,'Visavadar Bus Station'),
+                               (21,'Mendarda Bus Station'),
+                               (21,'Bilkha Bus Station'),
+                               (21,'Kutiyana Bus Station'),
+                               (21,'Bhayavadar Bus Station'),
+                               (22,'Bhuj Bus Station'),
+                               (22,'Mandvi Bus Station'),
+                               (22,'Mundra Bus Station'),
+                               (22,'Bhachu Bus Station'),
+                               (22,'Rapar Bus Station'),
+                               (22,'Naliya Bus Station'),
+                               (22,'Gandhidham Bus Station'),
+                               (23,'Amreli Bus Station'),
+                               (23,'Babra Bus Station'),
+                               (23,'Lathi Bus Station'),
+                               (23,'Chalala Bus Station'),
+                               (23,'Damnagar Bus Station'),
+                               (23,'Dhari Bus Station'),
+                               (23,'Girgadhada Bus Station'),
+                               (23,'Jafrabad Bus Station')
+
 ------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE USER_INFO
@@ -97,7 +159,34 @@ Seat_Status BIT NOT NULL DEFAULT 0,
 Deck_Type TINYINT NOT NULL, 
 Bus_Id INT CONSTRAINT chk_bus_seat FOREIGN KEY(Bus_Id) REFERENCES BUS(Bus_Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
 )
-------------------------------------------------------------------------------------------------------------------
+INSERT INTO SEAT VALUES (7,0,5,1),(7,0,5,1),(7,0,5,1),
+						(7,0,5,1),(7,0,5,1),(7,0,5,1),
+						(7,0,5,1),(7,0,5,1),(7,0,5,1),
+						(7,0,5,1),(6,0,5,1),(6,0,5,1),
+						(6,0,5,1),(6,0,6,1),(6,0,6,1),
+						(6,0,6,1),(6,0,6,1),(6,0,6,1),
+						(6,0,6,1),(6,0,6,1),(6,0,6,1),
+						(6,0,6,1),(6,0,6,1),(6,0,6,1),
+						(6,0,6,1),(6,0,6,1),(6,0,6,1),
+						(6,0,6,1),(6,0,6,1),(6,0,6,1),
+						(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),
+                        			(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),
+                       			 	(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),
+                        			(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),
+                        			(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),(7,0,5,2),
+                        			(7,0,5,2),(7,0,5,2),(7,0,5,2),
+						(6,0,5,3),(6,0,5,3),(6,0,5,3),
+						(6,0,5,3),(6,0,5,3),(6,0,5,3),
+						(6,0,5,3),(6,0,5,3),(6,0,5,3),
+						(6,0,5,3),(6,0,5,3),(6,0,5,3),
+						(6,0,5,3),(6,0,5,3),(6,0,5,3),
+						(6,0,5,3),(6,0,5,3),(6,0,5,3),
+						(6,0,5,3),(6,0,5,3),(6,0,5,3),
+						(6,0,5,3),(6,0,5,3),(6,0,5,3),
+						(6,0,5,3),(6,0,5,3)
+				
+--------------------------------------------------------------------------------------------------------------
+
 CREATE TABLE DRIVER
 (
     Driver_Id INT CONSTRAINT DRIVER_DriverId_PK PRIMARY KEY IDENTITY(1,1),
@@ -106,6 +195,18 @@ CREATE TABLE DRIVER
     Contact_No varchar(10) CONSTRAINT  DRIVER_ContactNo CHECK(Contact_No LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') NOT NULL,
     Bus_Id INT CONSTRAINT BusId_FK FOREIGN KEY REFERENCES BUS(Bus_Id) NOT NULL
 )
+
+INSERT INTO DRIVER VALUES   ('Abhijeet', 'Gupta', 9898362520,1),
+                            ('Aditya', 'Gupta', 9595632325,2),
+                            ('Akshat', 'Acharya', 9656458875,3),
+                            ('Amanpreet', 'Agarwal', 9898745652,4),
+                            ('Amitava', 'Khatri', 7775648223,5),
+                            ('Angad' ,'Ahuja', 5648732001,6),
+                            ('Aditya' ,'Anand', 5643321008,7),
+                            ('Aniruddh' ,'Laghari', 4585523110,8),
+                            ('Anubhav' ,'Patel', 9996533012,9),
+                            ('Arjun' ,'Reddy', 6532288774,10)
+
 
 ------------------------------------------------------------------------------------------------------------------
 CREATE TABLE TRAVEL_SCHEDULE(
