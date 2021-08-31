@@ -150,7 +150,7 @@ INSERT INTO USER_INFO VALUES ('Mehul','Jambukiya','9773931957','MehulJambukiya56
                             ('Preet','Gandhi','8125365464','preetgandhi57@gmail.com','preet89$','1992/09/04',1,'Rajkot'),
                             ('Dilip','Kumavat','7043185227','dilipkumavat@gmail.com','Pass@12','1999/07/18',1,'Ahmedabad')
 ---------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------
+
 CREATE TABLE BUS
 (
     Bus_Id INT PRIMARY KEY IDENTITY(1,1),
@@ -232,7 +232,8 @@ INSERT INTO DRIVER VALUES   ('Abhijeet', 'Gupta', 9898362520,1),
                             ('Arjun' ,'Reddy', 6532288774,10)
 
 
-------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+
 CREATE TABLE TRAVEL_SCHEDULE(
 Schedule_Id INT PRIMARY KEY IDENTITY(1,1),
 Bus_Id INT NOT NULL,
@@ -257,7 +258,20 @@ CONSTRAINT DriverID_FK FOREIGN KEY (DRIVER_Id) REFERENCES DRIVER(Driver_Id) ON D
 CONSTRAINT UserId_FK FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id])
 )
 
-------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO TRAVEL_SCHEDULE VALUES(1,1,16,2,17,10,'08:00:00 PM','2021-08-26',210,12,4.0,1,1),
+                                  (2,2,18,16,16,6,'03:00:00 PM','2021-08-26',250,13,4.3,1,2),
+                                  (3,3,21,41,18,19,'05:00:00 AM','2021-08-27',500,10,3.0,1,3),
+                                  (4,4,22,48,16,2,'06:00:00 PM','2021-08-26',340,09,2.0,1,4),
+                                  (5,5,23,55,16,8,'07:00:00 AM','2021-08-26',270,08,NULL,1,5),
+                                  (6,6,16,2,17,13,'08:00:00 AM','2021-08-27',440,16,4.0,1,6),
+                                  (7,7,19,28,17,10,'09:00:00 PM','2021-08-26',530,14,4.2,1,7),
+                                  (8,8,20,38,16,7,'10:00:00 AM','2021-08-26',670,21,4.5,1,8),
+                                  (9,9,16,2,23,54,'09:30:00 AM','2021-08-27',870,20,NULL,1,9),
+                                  (10,10,16,2,19,32,'04:00:00 PM','2021-08-26',250,11,4.0,1,10)
+
+-----------------------------------------------------------------------------------------------------------
+
 CREATE TABLE PASSENGER
 (
 Passenger_Id INT PRIMARY KEY IDENTITY(1,1),
@@ -273,7 +287,21 @@ CONSTRAINT Chk_Gender_ CHECK(Gender BETWEEN 1 AND 3),
 CONSTRAINT FK_User_Id FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id]) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT chk_bus_seat_ FOREIGN KEY(Bus_Id) REFERENCES BUS(Bus_Id)
 )
-------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO PASSENGER VALUES ('Mehul Jambukiya',23,1,2,1,2,0),
+('Shreya Jambukiya',22,2,3,1,2,1),
+('Darshan Shah',26,1,12,4,3,1),
+('Honey Shah',20,2,13,4,3,0),
+('Paresh Shah',36,1,14,4,3,1),
+('Chameli Shah',33,2,15,4,3,1),
+('Hardik Niranjani',22,1,8,8,1,0),
+('Preet Gandhi',21,1,9,9,1,0),
+('Dilip Kumavat',25,1,10,10,1,1),
+('Arpan Gajjar',24,1,11,10,1,1)
+
+
+--------------------------------------------------------------------------------------------------------------
+
 CREATE TABLE TICKETS
 (
 Ticket_Id INT PRIMARY KEY IDENTITY(1,1),
