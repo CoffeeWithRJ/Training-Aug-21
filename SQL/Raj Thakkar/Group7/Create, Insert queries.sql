@@ -10,6 +10,12 @@ CREATE TABLE OBJECT_MASTER
 [Type_Name] VARCHAR(20) NOT NULL
 )
 
+INSERT INTO OBJECT_MASTER VALUES ('Gender'),
+                                 ('Deck_Type'),
+                                 ('Seat_Type'),
+                                 ('Bus_Type'),
+                                 ('Payment_Type'),
+                                 ('Cities')
 ----------------------------------------------------------------------------------------------------------- 
 
 CREATE TABLE [OBJECT]
@@ -19,6 +25,31 @@ Obj_Id INT PRIMARY KEY IDENTITY(1,1),
 Obj_Name VARCHAR(30) NOT NULL,
 CONSTRAINT FK_Type_Id FOREIGN KEY([Type_Id]) REFERENCES OBJECT_MASTER([Type_Id])
 )
+
+
+INSERT INTO [OBJECT] VALUES (1,'Male'),
+                            (1,'Female'),
+                            (1,'Others'),
+                            (2,'Upper'),
+                            (2,'Lower'),
+                            (3,'Sleeper'),
+                            (3,'Seat'),
+                            (4,'Express'),
+                            (4,'Gsrtc'),
+                            (4,'Volvo'),
+                            (4,'Intercity Express'),
+                            (5,'Debit-Card'),
+                            (5,'Credit-Card'),
+                            (5,'NetBanking'),
+                            (5,'UPI'),
+                            (6,'Ahmedabad'),
+                            (6,'Surat'),
+                            (6,'Rajkot'),
+                            (6,'Vadodara'),
+                            (6,'Bhavnagar'),
+                            (6,'Junagadh'),
+                            (6,'Bhuj'),
+                            (6,'Amreli')
 
 -----------------------------------------------------------------------------------------------------------
 CREATE TABLE SUB_LOCATION
@@ -141,7 +172,8 @@ CREATE TABLE PAYMENT
 	CONSTRAINT Chk_Payment_type CHECK(Payment_type BETWEEN 12 AND 15)
 )
 ------------------------------------------------------------------------------------------------------------------
-CREATE TABLE BOOKING_DETAILS
+
+ CREATE TABLE BOOKING_DETAILS
 (
 Bd_Id INT IDENTITY PRIMARY KEY,
 Booking_Date DATE NOT NULL,
@@ -150,11 +182,29 @@ Payment_ID INT NOT NULL UNIQUE CONSTRAINT FK_Payment FOREIGN KEY (Payment_Id) RE
 Schedule_Id INT NOT NULL CONSTRAINT Schedule_FK0 FOREIGN KEY (Schedule_Id) REFERENCES TRAVEL_SCHEDULE(Schedule_Id) ON DELETE CASCADE ON UPDATE CASCADE,
 [User_Id] INT NOT NULL CONSTRAINT User_Fk11 FOREIGN KEY ([User_Id]) REFERENCES USER_INFO([User_Id]) ON DELETE CASCADE ON UPDATE CASCADE
 )
-  
+ 
+ 
+INSERT INTO BOOKING_DETAILS VALUES ('2021-08-19',1,1,1,1),
+                           ('2021-08-20',0,2,2,2),
+                           ('2021-08-21',0,3,3,3),
+                           ('2021-08-22',1,4,4,4),
+                           ('2021-08-23',1,5,5,5),
+                           ('2021-08-25',1,6,6,6),
+                           ('2021-08-24',0,7,7,7),
+                           ('2021-08-24',1,8,8,8),
+                           ('2021-08-25',1,9,9,9),
+                           ('2021-08-20',1,10,10,10) 
+						   
+ 
 -------------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE CANCELLATION
 (
     Cancellation_Id INT PRIMARY KEY IDENTITY(1,1),
-    Ticket_Id INT CONSTRAINT chk_ticket_cancel FOREIGN KEY (Ticket_Id) REFERENCES TICKETS(Ticket_Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
-    Bd_Id INT CONSTRAINT chk_bd_cancel FOREIGN KEY (Bd_Id) REFERENCES BOOKING_DETAILS(Bd_Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
+    Ticket_Id INT CONSTRAINT chk_ticket_cancel UNIQUE FOREIGN KEY (Ticket_Id) REFERENCES TICKETS(Ticket_Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    Bd_Id INT CONSTRAINT chk_bd_cancel UNIQUE FOREIGN KEY (Bd_Id) REFERENCES BOOKING_DETAILS(Bd_Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
 )
+              
+
+INSERT INTO CANCELLATION VALUES (2,2),                                                                                                                                    
+				(3,3),
+				(7,7)
