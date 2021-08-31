@@ -138,7 +138,19 @@ City VARCHAR(15) NOT NULL,
 CONSTRAINT Chk_Gender CHECK(Gender BETWEEN 1 AND 3)
 )
 
+
+INSERT INTO USER_INFO VALUES ('Mehul','Jambukiya','9773931957','MehulJambukiya56@gmail.com','Mehul&#89','1998/05/21',1,'Rajkot'),
+                            ('Shikhar','Parihar','9995631245','ShikharP@gmail.com','Pshi54*','2000/01/01',1,'Bhavnagar'),
+                            ('Smit','Kapadiya','8155839261','Kapdiya@gmai.com','smithyP@78','1999/07/31',1,'Surat'),
+                            ('Darshan','Shah','8563214578','darshanshah@gmai.com','darPass&12','1997/03/11',1,'Amreli'),
+                            ('Neel','Patel','7496853215','NeelPatel121@gmai.com','ForgotPass87','1999/11/21',1,'Talala'),
+                            ('Urvish','Gajjar','8985868487','Urvishg@yahoo.com','Ug44#22','1999/08/18',1,'Ahmedabad'),
+                            ('Barkha','Mahajan','6535101585','barkha@gmail.com','bmWorld%$34','1995/05/24',2,'Himmat nagar'),
+                            ('Hardik','Niranjani','9856745852','hardikniranjani@gmail.com','Nij^$#098','1991/2/25',1,'Saurashtra'),
+                            ('Preet','Gandhi','8125365464','preetgandhi57@gmail.com','preet89$','1992/09/04',1,'Rajkot'),
+                            ('Dilip','Kumavat','7043185227','dilipkumavat@gmail.com','Pass@12','1999/07/18',1,'Ahmedabad')
 ---------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
 CREATE TABLE BUS
 (
     Bus_Id INT PRIMARY KEY IDENTITY(1,1),
@@ -147,9 +159,21 @@ CREATE TABLE BUS
     Bus_Type TINYINT NOT NULL,
     AC_Type VARCHAR(10) DEFAULT 'Non-AC',
     Total_Seat TINYINT NOT NULL,
-	CONSTRAINT Chk_Bus_Type CHECK(Bus_Type BETWEEN 8 AND 11)
+    CONSTRAINT Chk_Bus_Type CHECK(Bus_Type BETWEEN 8 AND 11)
 )
 
+
+INSERT INTO BUS VALUES
+    ('GJ27BH4726',10,'AC',30),
+    ('GJ01NE5936',9,'Non-AC',28),
+    ('GJ01FD5395',9,'AC',26),
+    ('GJ05JW2957',11,'Non-AC',28),
+    ('GJ18KE3967',10,'AC',30),
+    ('GJ04KI4967',11,'Non-AC',25),
+    ('GJ10LE3753',8,'Non-AC',27),
+    ('GJ09KE3957',9,'Non-AC',28),
+    ('GJ03FW8572',10,'AC',30),
+    ('GJ12MN3781',9,'Non-AC',28)
 ------------------------------------------------------------------------------------------------------------------
 CREATE TABLE SEAT
 (
