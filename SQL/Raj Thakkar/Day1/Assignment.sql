@@ -1,35 +1,44 @@
-CREATE TABLE Employeess
+--You have been hired to create a relational database to support a car sales business. 
+--You need to store information on the business’s employees, inventory, and completed sales.
+--You also need to account for the fact that each salesperson receives a different percentage of their sales in commission. 
+--What tables and columns would you create in your relational database, and how would you link the tables?
+
+CREATE TABLE Employees
 (
-EmployeeId int NOT NULL PRIMARY KEY,
-FirstName varchar(50) NOT NULL,
-LastName varchar(50) NOT NULL,
-Email varchar(100) NOT NULL,
-PhoneNumber varchar(10) NOT NULL CONSTRAINT chkLengthh CHECK(PhoneNumber LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
-Hire_Date date NOT NULL,
-Salary money,
-Commission int CONSTRAINT FK0 FOREIGN KEY REFERENCES Commission(commisionTab),
+Employee_Id INT PRIMARY KEY IDENTITY(1,1),
+FirstName VARCHAR(30) NOT NULL,
+LastName VARCHAR(30) NOT NULL,
+Email VARCHAR(100) CONSTRAINT Chk_Email CHECK(Email LIKE '%__@_%.com') UNIQUE,
+PhoneNumber VARCHAR(10) NOT NULL CONSTRAINT Chk_Number CHECK(PhoneNumber LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
+Hire_Date DATE NOT NULL,
+Salary MONEY,
+Commission INT,
 )
 
-CREATE TABLE Inventoryy
+CREATE TABLE Inventory
 (
-Car_Id int NOT NULL PRIMARY KEY,
-ModelName varchar(50),
-Price money NOT NULL,
+Car_Id INT PRIMARY KEY IDENTITY(1,1),
+Model_Name VARCHAR(50),
+Price MONEY NOT NULL,
 )
 
 CREATE TABLE Sales
 (
-    SalesId int NOT NULL PRIMARY KEY IDENTITY(1,1),
-	Employee_Id  int CONSTRAINT FK1 FOREIGN KEY REFERENCES Employeess(EmployeeId),
-	CarId int CONSTRAINT FK2 FOREIGN KEY REFERENCES Inventoryy(Car_Id),
-	Sales_date date NOT NULL,
-	SalesQty int NOT NULL,
+    Sales_Id INT PRIMARY KEY IDENTITY(1,1),
+	Employee_Id  INT CONSTRAINT FK_Employee_Id FOREIGN KEY (Employee_Id) REFERENCES Employees(Employee_Id),
+	Car_Id INT CONSTRAINT FK_CAR_Id FOREIGN KEY REFERENCES Inventory(Car_Id),
+	Sales_Date DATE NOT NULL,
+	SalesQty INT NOT NULL,
 
 )
 
 
 
 SELECT * INTO Comission FROM 
-(SELECT sum(Sales.SalesQty) as Total_sale,Employee_Id ,comissionTab=sum(Sales.SalesQty)*0.10
-FROM Sales)C
+(
+SELECT SUM(Sales.SalesQty) AS Total_sale
+,      Employee_Id
+,      ComissionTab=SUM(Sales.SalesQty)*0.10
+FROM Sales
+)C
 
