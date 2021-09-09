@@ -8,7 +8,6 @@ FROM Employee1
 GO
 
 --5 Students Name, Address, City, DOB, Standard need to be inserted in the student table, need to fetch these result from json variable. and select output in the json format
-
 DECLARE @Info NVARCHAR(MAX)
 SET @Info='[{"Name":"James Cole","ADDRESS":"22nd street","City":"Manhattan","DOB":"2008-06-01","Standard":11},
             {"Name":"Anna Fehya","ADDRESS":"Judges Bunglow","City":"Miami","DOB":"2007-02-01","Standard":12},

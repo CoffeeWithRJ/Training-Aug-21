@@ -19,7 +19,6 @@ BEGIN
        Standard VARCHAR(20) '$.Standard'
    )
 ) AS Temp
-   
 END
 
 

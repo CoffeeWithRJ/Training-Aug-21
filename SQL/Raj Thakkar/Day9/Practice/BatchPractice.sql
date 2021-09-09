@@ -7,15 +7,16 @@ SET @productKey = 424
 
 
 --CASE--
-SELECT   ProductNumber, Category =  
-      CASE ProductLine  
+SELECT   ProductNumber, 
+         Category =  
+       CASE ProductLine  
          WHEN 'R' THEN 'Road'  
          WHEN 'M' THEN 'Mountain'  
          WHEN 'T' THEN 'Touring'  
          WHEN 'S' THEN 'Other sale items'  
          ELSE 'Not for sale'  
       END,  
-   Name  
+         Name  
 FROM Production.Product  
 ORDER BY ProductNumber
 
