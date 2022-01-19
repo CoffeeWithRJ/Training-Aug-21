@@ -50,7 +50,6 @@
     <Compile Include="Assignment2.cs" />
     <Compile Include="Assignment3.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="Class2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
