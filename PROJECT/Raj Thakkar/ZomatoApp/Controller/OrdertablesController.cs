@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ZomatoApp.DBContext;
 using ZomatoApp.Models;
 using ZomatoApp.Repository.Interfaces;
 
@@ -14,73 +15,76 @@ namespace ZomatoApp.Controllers
     [ApiController]
     public class OrdertablesController : ControllerBase
     {
-        private readonly ZomatoApp_ProjectContext _context;
-        IOrder order;
-        public OrdertablesController(IOrder ord ,ZomatoApp_ProjectContext context)
+      
+        private readonly IOrder order;
+        public OrdertablesController(IOrder ord)
         {
-            this.order = ord;
-            this._context = context;
+            order = ord;
+           
         }
 
+        //GET: api/Ordertable
         [HttpGet]
-        public IEnumerable<Ordertable> AllCityMethod()
+        public IEnumerable<Ordertable> AllOrderMethod()
         {
             return order.GetAll();
         }
-       
-        [HttpGet("{id}")]
-        public ActionResult<Ordertable> GetCitys(int id)
-        {
-            var city = order.GetById(id);
 
-            if (city == null)
+        //Get By Id: api/Ordertable/id
+        [HttpGet("{id}")]
+        public ActionResult<Ordertable> GetOrder(int id)
+        {
+            var orders = order.GetById(id);
+
+            if (orders == null)
             {
                 return NotFound();
             }
             else
             {
-                return city;
+                return orders;
             }
         }
 
+        //POST: api/Ordertable
         [HttpPost]
-        public string creates([FromBody] Ordertable addCity)
+        public string creates([FromBody] Ordertable addOrder)
         {
-             order.Create(addCity);
-                Ordertable addedCity = _context.Ordertables.ToList().Last();
-                return $"Ordertable {addedCity.Orderid} is added successfully and your id is";
+            addOrder.Dates=DateTime.Now;
+             order.Create(addOrder);
+              
+                return $"Ordertable order is added successfully";
   
         }
 
-        //Delete
+        //Delete by id
         [HttpDelete("{id}")]
-        public IActionResult DeleteCity(int id)
+        public IActionResult DeleteOrder(int id)
         {
-            var cityes = order.GetById(id);
-            if (cityes == null)
+            var Order = order.GetById(id);
+            if (Order == null)
             {
                 return NotFound();
             }
 
-            order.Delete(cityes);
+            order.Delete(Order);
 
             return NoContent();
         }
 
         //Put
-
         [HttpPut("{id}")]
-        public ActionResult<Ordertable> PutCity(int id, Ordertable city)
+        public ActionResult<Ordertable> PutOrder(int id, Ordertable Order)
         {
             try
             {
-                order.Update(city);
+                order.Update(Order);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            return GetCitys(id);
+            return GetOrder(id);
 
         }
 

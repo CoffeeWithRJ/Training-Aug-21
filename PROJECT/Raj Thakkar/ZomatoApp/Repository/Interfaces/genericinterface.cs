@@ -16,6 +16,8 @@ namespace ZomatoApp.Repository.Interfaces
         int Count(Func<T, bool> predicate);
         bool Any(Func<T, bool> predicate);
         bool Any();
+        T FirstOrDefault(Func<T, bool> predicate);
+
     }
 
 }

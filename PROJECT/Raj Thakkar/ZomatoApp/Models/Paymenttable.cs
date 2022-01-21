@@ -14,7 +14,7 @@ namespace ZomatoApp.Models
         public int Userid { get; set; }
         public int Orderid { get; set; }
 
-        public virtual Ordertable Order { get; set; }
-        public virtual UserSignup User { get; set; }
+        //public virtual Ordertable Order { get; set; }
+        //public virtual UserSignup User { get; set; }
     }
 }

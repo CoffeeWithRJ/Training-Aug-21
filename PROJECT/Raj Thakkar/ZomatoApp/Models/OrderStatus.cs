@@ -9,12 +9,12 @@ namespace ZomatoApp.Models
     {
         public OrderStatus()
         {
-            Ordertables = new HashSet<Ordertable>();
+            //Ordertables = new HashSet<Ordertable>();
         }
 
         public int Orderstatusid { get; set; }
         public string Orderstauts { get; set; }
 
-        public virtual ICollection<Ordertable> Ordertables { get; set; }
+        //public virtual ICollection<Ordertable> Ordertables { get; set; }
     }
 }

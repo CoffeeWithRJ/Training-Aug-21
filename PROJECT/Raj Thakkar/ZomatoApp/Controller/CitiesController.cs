@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ZomatoApp.DBContext;
 using ZomatoApp.Models;
+using ZomatoApp.Repository.Interfaces;
 
 namespace ZomatoApp.Controllers
 {
@@ -13,59 +15,52 @@ namespace ZomatoApp.Controllers
     [ApiController]
     public class CitiesController : ControllerBase
     {
-        private readonly ZomatoApp_ProjectContext _context;
+        private readonly ICity city;
 
-        public CitiesController(ZomatoApp_ProjectContext context)
+        public CitiesController(ICity _city)
         {
-            _context = context;
+            city = _city;
         }
 
         // GET: api/Cities
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCities()
+        public IEnumerable<City> GetCities()
         {
-            return await _context.Cities.ToListAsync();
+            //var city = await _context.Cities.ToListAsync();
+            return city.GetAll();
         }
 
-        // GET: api/Cities/5
+        // GET: api/Cities/id
         [HttpGet("{id}")]
         public async Task<ActionResult<City>> GetCity(int id)
         {
-            var city = await _context.Cities.FindAsync(id);
+            var city1 = city.GetById(id);
 
-            if (city == null)
+            if (city1 == null)
             {
                 return NotFound();
             }
 
-            return city;
+            return city1;
         }
 
-        // PUT: api/Cities/5
+        // PUT: api/Cities/id
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(int id, City city)
+        public async Task<IActionResult> PutCity(int id, City city1)
         {
-            if (id != city.CityId)
+            if (id != city1.CityId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(city).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                city.Update(city1);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!CityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                Console.WriteLine(e);
             }
 
             return NoContent();
@@ -73,33 +68,28 @@ namespace ZomatoApp.Controllers
 
         // POST: api/Cities
         [HttpPost]
-        public async Task<ActionResult<City>> PostCity(City city)
+        public async Task<ActionResult<City>> PostCity(City city1)
         {
-            _context.Cities.Add(city);
-            await _context.SaveChangesAsync();
+            city.Create(city1);
 
-            return CreatedAtAction("GetCity", new { id = city.CityId }, city);
+            return CreatedAtAction("GetCity", new { id = city1.CityId }, city1);
         }
 
-        // DELETE: api/Cities/5
+        // DELETE: api/Cities/id
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {
-            var city = await _context.Cities.FindAsync(id);
-            if (city == null)
+            var city1 = city.GetById(id);
+            if (city1 == null)
             {
                 return NotFound();
             }
 
-            _context.Cities.Remove(city);
-            await _context.SaveChangesAsync();
-
+            city.Delete(city1);
+            
             return NoContent();
         }
 
-        private bool CityExists(int id)
-        {
-            return _context.Cities.Any(e => e.CityId == id);
-        }
+      
     }
 }

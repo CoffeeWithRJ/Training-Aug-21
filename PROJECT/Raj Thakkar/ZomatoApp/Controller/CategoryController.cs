@@ -4,6 +4,7 @@ using ZomatoApp.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ZomatoApp.DBContext;
 
 namespace ZomatoApp.Controllers
 {
@@ -11,76 +12,77 @@ namespace ZomatoApp.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ZomatoApp_ProjectContext context;
-        ICategory Category;
-        public CategoryController(ICategory custo, ZomatoApp_ProjectContext _context)
+      
+        private readonly ICategory Category;
+        public CategoryController(ICategory category)
         {
-            this.Category = custo;
-            this.context = _context;
+            Category = category;
+           
         }
 
+        //GET: api/Category
         [HttpGet]
         public IEnumerable<Category> GetAllCategoryMethod()
         {
             return  Category.GetAll();
         }
 
-
+        //POST: api/Category
         [HttpPost]
         public string creates([FromBody] Category addCustomer)
         {
 
-            Category checkDoctor = context.Categories.FirstOrDefault(s => s.CategoryName == addCustomer.CategoryName && s.ResId == addCustomer.ResId);
-            if (checkDoctor != null)
+            Category checkCategory = Category.FirstOrDefault(s => s.CategoryName == addCustomer.CategoryName && s.ResId == addCustomer.ResId);
+            if (checkCategory != null)
                 //new Exception("Create already exists...");
                 return "Category already exists...";
             else
             {
                 Category.Create(addCustomer);
-                Category addedCustomer = context.Categories.ToList().Last();
-                return $"Category {addedCustomer.CategoryName} is added successfully and your id is {addedCustomer}";
+                return $"Category {addCustomer.CategoryName} is added successfully and your id is {addCustomer.CategoryId}";
             }
         }
+
         //Get by ID
         [HttpGet("{id}")]
-        public ActionResult<Category> GetCitys(int id)
+        public ActionResult<Category> GetCategories(int id)
         {
-            var categorys = Category.GetById(id);
+            var categories = Category.GetById(id);
 
-            if (categorys == null)
+            if (categories == null)
             {
                 return NotFound();
             }
-            return categorys;
+            return categories;
         }
         //Delete
         [HttpDelete("{id}")]
         public IActionResult DeleteCategory(int id)
         {
-            var categorys = Category.GetById(id);
-            if (categorys == null)
+            var categories = Category.GetById(id);
+            if (categories == null)
             {
                 return NotFound();
             }
 
-            Category.Delete(categorys);
+            Category.Delete(categories);
 
             return NoContent();
         }
 
-        //Put
+        //PUT: api/Category/id
         [HttpPut("{id}")]
-        public ActionResult<Category> PutMovie(int id, Category categorys)
+        public ActionResult<Category> PutCategory(int id, Category categories)
         {
             try
             {
-                Category.Update(categorys);
+                Category.Update(categories);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            return GetCitys(id);
+            return GetCategories(id);
         }
     }
 }

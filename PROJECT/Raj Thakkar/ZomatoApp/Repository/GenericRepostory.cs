@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ZomatoApp.Models;
 using ZomatoApp.Repository.Interfaces;
+using ZomatoApp.DBContext;
 
 namespace ZomatoApp.Repository
 {
@@ -69,6 +70,10 @@ namespace ZomatoApp.Repository
         {
             context.Entry(entity).State = EntityState.Modified;
             context.SaveChanges();
+        }
+        public T FirstOrDefault(Func<T, bool> predicate)
+        {
+            return context.Set<T>().FirstOrDefault(predicate);  
         }
     }
 }

@@ -9,8 +9,8 @@ namespace ZomatoApp.Models
     {
         public UserSignup()
         {
-            Ordertables = new HashSet<Ordertable>();
-            Paymenttables = new HashSet<Paymenttable>();
+            //Ordertables = new HashSet<Ordertable>();
+            //Paymenttables = new HashSet<Paymenttable>();
         }
 
         public int UserId { get; set; }
@@ -20,7 +20,7 @@ namespace ZomatoApp.Models
         public string Names { get; set; }
         public string Lpassword { get; set; }
 
-        public virtual ICollection<Ordertable> Ordertables { get; set; }
-        public virtual ICollection<Paymenttable> Paymenttables { get; set; }
+        //public virtual ICollection<Ordertable> Ordertables { get; set; }
+        //public virtual ICollection<Paymenttable> Paymenttables { get; set; }
     }
 }

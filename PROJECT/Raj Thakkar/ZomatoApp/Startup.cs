@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,15 +11,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 using ZomatoApp.Authentication;
 using ZomatoApp.Models;
 using ZomatoApp.Repository;
 using ZomatoApp.Repository.Interfaces;
+using System.Text;
+using ZomatoApp.DBContext;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace ZomatoApp
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        public IConfiguration Configuration { get; }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -35,52 +43,48 @@ namespace ZomatoApp
     .AllowAnyHeader();
                 });
             });
-            services.AddControllers();
+            
             //services.AddDbContext<ZomatoApp_ProjectContext>(options => options.UseSqlServer("Server=PC0610\\MSSQL2019;Database=WebAPIZomato;Integrated Security=True"));
             // For Entity Framework  
-            IServiceCollection serviceCollection = services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ZomatoAppDB")));
-           
-            // For Identity  
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddDbContext<ZomatoApp_ProjectContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ZomatoApp")));
+            services.AddControllers();
+            //AutoMapper
+            services.AddAutoMapper(typeof(Startup));
 
             // Adding Authentication  
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
 
-            // Adding Jwt Bearer  
-            .AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["JWT:ValidAudience"],
-                    ValidIssuer = Configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-                };
-            });
-            services.AddTransient<ICategory, RCategory>();
-         
-            services.AddTransient<IOffer, ROffer>();
-            services.AddTransient<IOrder, ROrder>();
-            services.AddTransient<IOrderStatus, ROrderStatus>();
-            services.AddTransient<IPayment, RPayment>();
-            services.AddTransient<IProduct, RProduct>();
-            services.AddTransient<IQuote, RQuote>();
-            services.AddTransient<IRestaurant, RRestaurant>();
-            services.AddTransient<IViewProduct, RViewProduct>();
-            services.AddTransient<IProduct, RProduct>();
-            services.AddTransient<IUserSignup, RUserSignup>();
-            services.AddTransient<ICity, RCity>();
-            
+            // Adding Jwt Bearer
+            //.AddJwtBearer(options =>
+            //{
+            //    options.SaveToken = true;
+            //    options.RequireHttpsMetadata = false;
+            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidAudience = Configuration["JWT:ValidAudience"],
+            //        ValidIssuer = Configuration["JWT:ValidIssuer"],
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+            //    };
+            //});
+            services.AddTransient<ICategory, CategoryRepository>();
+            services.AddTransient<ICart, CartRepository>();
+            services.AddTransient<IOrder, OrderRepository>();
+            services.AddTransient<IOrderStatus, OrderStatusRepository>();
+            services.AddTransient<IPayment, PaymentRepository>();
+            services.AddTransient<IProduct, ProductRepository>();
+            services.AddTransient<IRestaurant, RestaurantRepository>();
+            services.AddTransient<IViewProduct, ViewProductRepository>();
+            services.AddTransient<IProduct, ProductRepository>();
+            services.AddTransient<IUserSignup, UserSignupRepository>();
+            services.AddTransient<ICity, CityRepository>();
+            services.AddTransient<IPaymenttable, paymenttableRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,14 +95,14 @@ namespace ZomatoApp
                 app.UseDeveloperExceptionPage();
             }
 
+
+            app.UseHttpsRedirection();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
         }
     }

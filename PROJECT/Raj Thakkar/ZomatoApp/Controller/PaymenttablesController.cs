@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZomatoApp.Models;
+using ZomatoApp.DBContext;
+using ZomatoApp.Repository.Interfaces;
 
 namespace ZomatoApp.Controllers
 {
@@ -13,25 +15,25 @@ namespace ZomatoApp.Controllers
     [ApiController]
     public class PaymenttablesController : ControllerBase
     {
-        private readonly ZomatoApp_ProjectContext _context;
+        private readonly IPaymenttable Pay;
 
-        public PaymenttablesController(ZomatoApp_ProjectContext context)
+        public PaymenttablesController(IPaymenttable pay)
         {
-            _context = context;
+            Pay = pay;
         }
 
         // GET: api/Paymenttables
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Paymenttable>>> GetPaymenttables()
+        public IEnumerable<Paymenttable> GetPaymenttables()
         {
-            return await _context.Paymenttables.ToListAsync();
+            return Pay.GetAll();
         }
 
-        // GET: api/Paymenttables/5
+        // GET: api/Paymenttables/id
         [HttpGet("{id}")]
         public async Task<ActionResult<Paymenttable>> GetPaymenttable(int id)
         {
-            var paymenttable = await _context.Paymenttables.FindAsync(id);
+            var paymenttable = Pay.GetById(id);
 
             if (paymenttable == null)
             {
@@ -41,7 +43,7 @@ namespace ZomatoApp.Controllers
             return paymenttable;
         }
 
-        // PUT: api/Paymenttables/5
+        // PUT: api/Paymenttables/id
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPaymenttable(int id, Paymenttable paymenttable)
         {
@@ -50,13 +52,13 @@ namespace ZomatoApp.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(paymenttable).State = EntityState.Modified;
+           
 
             try
             {
-                await _context.SaveChangesAsync();
+                 Pay.Update(paymenttable);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
                 if (!PaymenttableExists(id))
                 {
@@ -75,8 +77,8 @@ namespace ZomatoApp.Controllers
         [HttpPost]
         public async Task<ActionResult<Paymenttable>> PostPaymenttable(Paymenttable paymenttable)
         {
-            _context.Paymenttables.Add(paymenttable);
-            await _context.SaveChangesAsync();
+            Pay.Create(paymenttable);
+           
 
             return CreatedAtAction("GetPaymenttable", new { id = paymenttable.Payid }, paymenttable);
         }
@@ -85,21 +87,21 @@ namespace ZomatoApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePaymenttable(int id)
         {
-            var paymenttable = await _context.Paymenttables.FindAsync(id);
+            var paymenttable = Pay.GetById(id);
             if (paymenttable == null)
             {
                 return NotFound();
             }
 
-            _context.Paymenttables.Remove(paymenttable);
-            await _context.SaveChangesAsync();
+            Pay.Delete(paymenttable);
+           
 
             return NoContent();
         }
 
         private bool PaymenttableExists(int id)
         {
-            return _context.Paymenttables.Any(e => e.Payid == id);
+            return Pay.Any(e => e.Payid == id);
         }
     }
 }

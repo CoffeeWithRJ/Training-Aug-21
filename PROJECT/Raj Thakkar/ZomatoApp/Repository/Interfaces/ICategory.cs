@@ -8,6 +8,6 @@ namespace ZomatoApp.Repository.Interfaces
 {
     public interface ICategory : GenericInterface<Category>
     {
-
+      
     }
 }

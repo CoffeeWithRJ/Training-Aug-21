@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZomatoApp.Models;
+using ZomatoApp.Repository.Interfaces;
 
 namespace ZomatoApp.Controllers
 {
@@ -13,50 +14,51 @@ namespace ZomatoApp.Controllers
     [ApiController]
     public class CartsController : ControllerBase
     {
-        private readonly ZomatoApp_ProjectContext _context;
+        private readonly ICart cart;
 
-        public CartsController(ZomatoApp_ProjectContext context)
+        public CartsController(ICart _cart)
         {
-            _context = context;
+            cart = _cart;
         }
 
         // GET: api/Carts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cart>>> GetCarts()
+    
+        public async Task<ActionResult> GetCarts()
         {
-            return await _context.Carts.ToListAsync();
+            var carts = await cart.GetCartsAsync();
+            return Ok(carts);
         }
 
-        // GET: api/Carts/5
+        // GET: api/Carts/id
         [HttpGet("{id}")]
         public async Task<ActionResult<Cart>> GetCart(int id)
         {
-            var cart = await _context.Carts.FindAsync(id);
+            var cart1 = cart.GetById(id);
 
-            if (cart == null)
+            if (cart1 == null)
             {
                 return NotFound();
             }
 
-            return cart;
+            return cart1;
         }
 
-        // PUT: api/Carts/5
+        // PUT: api/Carts/id
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCart(int id, Cart cart)
+        public async Task<IActionResult> PutCart([FromRoute]int id,[FromBody] Cart cart1)
         {
-            if (id != cart.CartId)
+            if (id != cart1.CartId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(cart).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                cart.Update(cart1);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
                 if (!CartExists(id))
                 {
@@ -73,33 +75,30 @@ namespace ZomatoApp.Controllers
 
         // POST: api/Carts
         [HttpPost]
-        public async Task<ActionResult<Cart>> PostCart(Cart cart)
+        public async Task<ActionResult<Cart>> PostCart(Cart cart1)
         {
-            _context.Carts.Add(cart);
-            await _context.SaveChangesAsync();
+            cart.Create(cart1);
 
-            return CreatedAtAction("GetCart", new { id = cart.CartId }, cart);
+            return CreatedAtAction("GetCart", new { id = cart1.CartId }, cart1);
         }
 
-        // DELETE: api/Carts/5
+        // DELETE: api/Carts/id
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCart(int id)
         {
-            var cart = await _context.Carts.FindAsync(id);
-            if (cart == null)
+            var cart1 = cart.GetById(id);
+            if (cart1 == null)
             {
                 return NotFound();
             }
 
-            _context.Carts.Remove(cart);
-            await _context.SaveChangesAsync();
-
+            cart.Delete(cart1);
             return NoContent();
         }
 
         private bool CartExists(int id)
         {
-            return _context.Carts.Any(e => e.CartId == id);
+            return cart.Any(e => e.CartId == id);
         }
     }
 }

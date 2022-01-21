@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZomatoApp.Models;
 using ZomatoApp.Repository.Interfaces;
+using ZomatoApp.DBContext;
 
 namespace ZomatoApp.Controllers
 {
@@ -15,37 +16,39 @@ namespace ZomatoApp.Controllers
     public class UserSignupsController : ControllerBase
     {
         
-        private readonly ZomatoApp_ProjectContext context;
-        IUserSignup UserSignup;
-        public UserSignupsController(IUserSignup custo, ZomatoApp_ProjectContext _context)
+        
+        private readonly IUserSignup UserSignup;
+        public UserSignupsController(IUserSignup user)
         {
-            this.UserSignup = custo;
-            this.context = _context;
+            UserSignup = user;
+            
         }
 
+        //Get All Method
         [HttpGet]
         public IEnumerable<UserSignup> AddUserMethod()
         {
             return UserSignup.GetAll();
         }
 
-
+        //Create User
         [HttpPost]
         public string creates([FromBody] UserSignup addUser)
         {
 
-            UserSignup checkuser = context.UserSignups.FirstOrDefault(s => s.Phoneno == addUser.Phoneno);
+            UserSignup checkuser = UserSignup.FirstOrDefault(s => s.Phoneno == addUser.Phoneno);
             if (checkuser != null)
                 //new Exception("Create already exists...");
                 return "User already exists...";
             else
             {
                 UserSignup.Create(addUser);
-                UserSignup addedUser = context.UserSignups.ToList().Last();
+                UserSignup addedUser = UserSignup.GetAll().Last();
                 return $"UserSingup {addedUser.Names} is added successfully and your id is {addedUser.UserId}";
             }
         }
 
+        //Get By Id
         [HttpGet("{id}")]
         public ActionResult<UserSignup> GetUserSignups(int id)
         {
@@ -57,6 +60,8 @@ namespace ZomatoApp.Controllers
             }
             return userSignup;
         }
+
+        //Delete User
         [HttpDelete("{id}")]
         public IActionResult DeleteUserSignup(int id)
         {
@@ -71,8 +76,7 @@ namespace ZomatoApp.Controllers
             return NoContent();
         }
 
-        //Put
-
+        //Update
         [HttpPut("{id}")]
         public ActionResult<UserSignup> PutUserSignup(int id, UserSignup userSignup)
         {

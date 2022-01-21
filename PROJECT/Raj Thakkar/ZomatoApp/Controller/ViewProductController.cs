@@ -4,6 +4,7 @@ using ZomatoApp.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ZomatoApp.DBContext;
 
 namespace ZomatoApp.Controllers
 {
@@ -11,18 +12,19 @@ namespace ZomatoApp.Controllers
     [ApiController]
     public class ViewProductController : ControllerBase
     {
-        private readonly ZomatoApp_ProjectContext context;
-        IViewProduct Category;
-        public ViewProductController(IViewProduct custo, ZomatoApp_ProjectContext _context)
+      
+        private readonly IViewProduct View;
+        public ViewProductController(IViewProduct view)
         {
-            this.Category = custo;
-            this.context = _context;
+            View = view;
+           
         }
 
+        //View all products
         [HttpGet]
-        public IEnumerable<Models.ViewProduct> AddNewDataMethod()
+        public IEnumerable<ViewProduct> AddNewDataMethod()
         {
-            return Category.GetAll();
+            return View.GetAll();
         }
 
             }

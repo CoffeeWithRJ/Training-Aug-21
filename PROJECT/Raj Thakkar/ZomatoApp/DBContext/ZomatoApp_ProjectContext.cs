@@ -1,34 +1,34 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Data.Entity;
+using DbContext = Microsoft.EntityFrameworkCore.DbContext;
+using ZomatoApp.Models;
 
-
-namespace ZomatoApp.Models
+namespace ZomatoApp.DBContext
 {
     public partial class ZomatoApp_ProjectContext : DbContext
     {
-        public ZomatoApp_ProjectContext()
-        {
-        }
+        //public ZomatoApp_ProjectContext()
+        //{
+        //}
 
         public ZomatoApp_ProjectContext(DbContextOptions<ZomatoApp_ProjectContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<Cart> Carts { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<City> Cities { get; set; }
-        public virtual DbSet<Offer> Offers { get; set; }
-        public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
-        public virtual DbSet<Ordertable> Ordertables { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
-        public virtual DbSet<Paymenttable> Paymenttables { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Quote> Quotes { get; set; }
-        public virtual DbSet<Restaurant> Restaurants { get; set; }
-        public virtual DbSet<UserSignup> UserSignups { get; set; }
-        public virtual DbSet<ViewProduct> ViewProducts { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<Cart> Carts { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<Category> Categories { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<City> Cities { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<OrderStatus> OrderStatuses { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<Ordertable> Ordertables { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<Payment> Payments { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<Paymenttable> Paymenttables { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<Product> Products { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<Restaurant> Restaurants { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<UserSignup> UserSignups { get; set; }
+        public virtual Microsoft.EntityFrameworkCore.DbSet<ViewProduct> ViewProducts { get; set; }
 
         
 
@@ -82,22 +82,11 @@ namespace ZomatoApp.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Offer>(entity =>
-            {
-                entity.ToTable("Offer");
-
-                entity.Property(e => e.OfferDiscountPrice).HasColumnType("money");
-
-                entity.Property(e => e.OfferName)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-            });
 
             modelBuilder.Entity<OrderStatus>(entity =>
             {
                 entity.ToTable("OrderStatus");
-
+                entity.Property(e => e.Orderstatusid).HasColumnName("Orderstatusid");
                 entity.Property(e => e.Orderstauts)
                     .IsRequired()
                     .HasMaxLength(10)
@@ -121,23 +110,29 @@ namespace ZomatoApp.Models
                     .HasColumnType("datetime")
                     .HasColumnName("dates");
 
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.Ordertables)
-                    .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_userid");
+                entity.Property(e => e.CustomerName)
+                   .IsRequired()
+                   .HasMaxLength(100);
 
-                entity.HasOne(d => d.OrderstatsNavigation)
-                    .WithMany(p => p.Ordertables)
-                    .HasForeignKey(d => d.Orderstats)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_orderstatus");
+                entity.Property(e => e.Orderstats).HasColumnName("Orderstats"); ;
+                entity.Property(e => e.Paymentid);
+                //entity.HasOne(d => d.Customer)
+                //    .WithMany(p => p.Ordertables)
+                //    .HasForeignKey(d => d.CustomerId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_userid");
 
-                entity.HasOne(d => d.Payment)
-                    .WithMany(p => p.Ordertables)
-                    .HasForeignKey(d => d.Paymentid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_paymentdats");
+                //entity.HasOne(d => d.OrderstatsNavigation)
+                //    .WithMany(p => p.Ordertables)
+                //    .HasForeignKey(d => d.Orderstats)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_orderstatus");
+
+                //entity.HasOne(d => d.Payment)
+                //    .WithMany(p => p.Ordertables)
+                //    .HasForeignKey(d => d.Paymentid)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_paymentdats");
             });
 
             modelBuilder.Entity<Payment>(entity =>
@@ -178,17 +173,17 @@ namespace ZomatoApp.Models
 
                 entity.Property(e => e.Userid).HasColumnName("userid");
 
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.Paymenttables)
-                    .HasForeignKey(d => d.Orderid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_orderSales");
+                //entity.HasOne(d => d.Order)
+                //    .WithMany(p => p.Paymenttables)
+                //    .HasForeignKey(d => d.Orderid)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_orderSales");
 
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Paymenttables)
-                    .HasForeignKey(d => d.Userid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_TempSales");
+                //entity.HasOne(d => d.User)
+                //    .WithMany(p => p.Paymenttables)
+                //    .HasForeignKey(d => d.Userid)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_TempSales");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -211,34 +206,6 @@ namespace ZomatoApp.Models
                     .HasColumnName("Product_Price");
             });
 
-            modelBuilder.Entity<Quote>(entity =>
-            {
-                entity.ToTable("Quote");
-
-                entity.Property(e => e.QuoteId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("Quote_id");
-
-                entity.Property(e => e.QuoteDiscount)
-                    .HasColumnType("money")
-                    .HasColumnName("Quote_Discount");
-
-                entity.Property(e => e.QuoteFinalTotal)
-                    .HasColumnType("money")
-                    .HasColumnName("Quote_FinalTotal");
-
-                entity.Property(e => e.QuoteSubtotal)
-                    .HasColumnType("money")
-                    .HasColumnName("Quote_subtotal");
-
-                entity.Property(e => e.ShippmentName)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ShippmentTax)
-                    .HasColumnType("money")
-                    .HasColumnName("Shippment_tax");
-            });
 
             modelBuilder.Entity<Restaurant>(entity =>
             {
@@ -304,16 +271,16 @@ namespace ZomatoApp.Models
                 entity.Property(e => e.ProductName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("Product_Name");
+                    .HasColumnName("ProductName");
 
                 entity.Property(e => e.ProductPrice)
                     .HasColumnType("money")
                     .HasColumnName("Product_Price");
 
-                entity.Property(e => e.RestorentName)
+                entity.Property(e => e.RestaurantName)
                     .HasMaxLength(100)
                     .IsUnicode(false)
-                    .HasColumnName("Restorent_Name");
+                    .HasColumnName("RestaurantName");
             });
 
             OnModelCreatingPartial(modelBuilder);

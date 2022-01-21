@@ -4,6 +4,7 @@ using ZomatoApp.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ZomatoApp.DBContext;
 
 namespace ZomatoApp.Controllers
 {
@@ -11,29 +12,30 @@ namespace ZomatoApp.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private readonly ZomatoApp_ProjectContext context;
-        IPayment Category;
-        public PaymentController(IPayment custo, ZomatoApp_ProjectContext _context)
+       
+        private readonly IPayment Pay;
+        public PaymentController(IPayment pay)
         {
-            this.Category = custo;
-            this.context = _context;
+            Pay = pay;
+          
         }
 
+        //GET: api/Payment
         [HttpGet]
-        public IEnumerable<Models.Payment> AddNewDataMethod()
+        public IEnumerable<Payment> AddNewDataMethod()
         {
-            return Category.GetAll();
+            return Pay.GetAll();
         }
 
 
-        // DELETE: api/Cosutomer/5
+        // DELETE: api/Payment/id
         [HttpDelete("{id}")]
         public string Deletes([FromBody] int id)
         {
             try
             {
-                var dataDelete = context.Payments.Single(s => s.PaymentId == id);
-                Category.Delete(dataDelete);
+                var dataDelete = Pay.GetById(id);
+                Pay.Delete(dataDelete);
                 return "Payment removed successfully";
             }
             catch (Exception)

@@ -4,6 +4,7 @@ using ZomatoApp.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ZomatoApp.DBContext;
 
 namespace ZomatoApp.Controllers
 {
@@ -11,46 +12,60 @@ namespace ZomatoApp.Controllers
     [ApiController]
     public class OrderStatusController : ControllerBase
     {
-        private readonly ZomatoApp_ProjectContext context;
-        IOrderStatus Category;
-        public OrderStatusController(IOrderStatus custo, ZomatoApp_ProjectContext _context)
+        
+        private readonly IOrderStatus orderStatus;
+        public OrderStatusController(IOrderStatus ostats)
         {
-            this.Category = custo;
-            this.context = _context;
+            this.orderStatus = ostats;
+           
         }
 
+        //GET: api/OrderStatus
         [HttpGet]
-        public IEnumerable<Models.OrderStatus> AddNewDataMethod()
+        public IEnumerable<OrderStatus> AddNewDataMethod()
         {
-            return Category.GetAll();
+            return orderStatus.GetAll();
         }
 
+        //Get by ID: api/OrderStatus/id
+        [HttpGet("{id}")]
+        public ActionResult<OrderStatus> GetCities(int id)
+        {
+            var orderstatus = orderStatus.GetById(id);
 
+            if (orderstatus == null)
+            {
+                return NotFound();
+            }
+            return orderstatus;
+        }
+
+        //POST: api/OrderStatus
         [HttpPost]
         public string creates([FromBody] OrderStatus obEntity)
         {
 
-            OrderStatus check = context.OrderStatuses.FirstOrDefault(s => s.Orderstatusid == obEntity.Orderstatusid);
+            OrderStatus check = orderStatus.FirstOrDefault(s => s.Orderstatusid == obEntity.Orderstatusid);
             if (check != null)
                 //new Exception("Create already exists...");
                 return "OrderStatus already exists...";
             else
             {
-                Category.Create(obEntity);
-                OrderStatus ObjEntity = context.OrderStatuses.ToList().Last();
-                return $"OrderStatus {ObjEntity.Orderstatusid} is added successfully and your id is {ObjEntity}";
+                orderStatus.Create(obEntity);
+                OrderStatus ObjEntity = (OrderStatus)orderStatus.GetById(obEntity.Orderstatusid);
+                return $"OrderStatus {ObjEntity.Orderstatusid} is added successfully and your id is {ObjEntity.Orderstatusid}";
             }
         }
 
 
-        // DELETE: api/Cosutomer/5
+        // DELETE: api/OrderStatus/id
         [HttpDelete("{id}")]
-        public string Deletes([FromBody] int id)
+        public String Deletes(int id)
         {
             try
             {
-                var dataDelete = context.OrderStatuses.Single(s => s.Orderstatusid == id);
-                Category.Delete(dataDelete);
+                var dataDelete = orderStatus.GetById(id);
+                orderStatus.Delete(dataDelete);
                 return "OrderStatus removed successfully";
             }
             catch (Exception)
@@ -58,5 +73,6 @@ namespace ZomatoApp.Controllers
                 return $"OrderStatus not found...";
             }
         }
+        
     }
 }
