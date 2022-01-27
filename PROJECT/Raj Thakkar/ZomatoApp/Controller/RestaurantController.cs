@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ZomatoApp.DBContext;
+using System.Threading.Tasks;
 
 namespace ZomatoApp.Controllers
 {
@@ -14,17 +15,19 @@ namespace ZomatoApp.Controllers
     {
 
        
-        private readonly IRestaurant Restaurant;
-        public RestaurantController(IRestaurant rest)
+        private readonly IRestaurant _Restaurant;
+        private readonly IProduct product;
+        public RestaurantController(IRestaurant rest, IProduct prod)
         {
-            Restaurant = rest;
+            _Restaurant = rest;
+            product = prod;
             
         }
         //get all restaurant
         [HttpGet]
-        public IEnumerable<Restaurant> GetRestorents()
+        public IEnumerable<Restaurant> GetRestaurents()
         {
-            return Restaurant.GetAll();
+            return _Restaurant.GetRestaurants();
         }
 
         //Add reastaurant
@@ -32,14 +35,14 @@ namespace ZomatoApp.Controllers
         public string creates([FromBody] Restaurant addUser)
         {
 
-            Restaurant checkRestaurant = Restaurant.FirstOrDefault(s => s.RestaurantName == addUser.RestaurantName && s.RestaurantCity == addUser.RestaurantCity);
+            Restaurant checkRestaurant = _Restaurant.FirstOrDefault(s => s.RestaurantName == addUser.RestaurantName && s.RestaurantCity == addUser.RestaurantCity);
             if (checkRestaurant != null)
                 
                 return "Restaurant already exists...";
             else
             {
-                Restaurant.Create(addUser);
-                Restaurant addedUser = Restaurant.GetAll().Last();
+                _Restaurant.Create(addUser);
+                Restaurant addedUser = _Restaurant.GetAll().Last();
                 return $"Restaurant {addedUser.RestaurantName} is added successfully and your id is {addedUser.RestaurantId}";
             }
         }
@@ -48,7 +51,7 @@ namespace ZomatoApp.Controllers
         [HttpGet("{id}")]
         public ActionResult<Restaurant> GetRestaurents(int id)
         {
-            var restaurent = Restaurant.GetById(id);
+            var restaurent = _Restaurant.GetById(id);
 
             if (restaurent == null)
             {
@@ -56,18 +59,39 @@ namespace ZomatoApp.Controllers
             }
             return restaurent;
         }
+        //[HttpGet("{id")]
+        //public Task<ActionResult<Restaurant>>  GetProductandRest(int id)
+        //{
+        //    var datta = (from p in product
+        //                 join r in _Restaurant
+        //                 on p.RestaurantId equals r.RestaurantId
+        //                 select new
+        //                 {
+        //                     p.ProductId,
+        //                     p.ProductName,
+        //                     p.Product_price,
+        //                     p.Product_Image,
+        //                     p.CategoryId,
+        //                     p.RestaurantId = id,
+        //                     r.RestaurantName
+        //                 }).ToList();
+        //    //var Product1 = product.GetAll();
 
+          
+        //        return datta;
+            
+        //}
         //delete 
         [HttpDelete("{id}")]
         public IActionResult DeleteRestaurant(int id)
         {
-            var restaurant = Restaurant.GetById(id);
+            var restaurant = _Restaurant.GetById(id);
             if (restaurant == null)
             {
                 return NotFound();
             }
 
-            Restaurant.Delete(restaurant);
+            _Restaurant.Delete(restaurant);
 
             return NoContent();
         }
@@ -78,7 +102,7 @@ namespace ZomatoApp.Controllers
         {
             try
             {
-                Restaurant.Update(restaurant);
+                _Restaurant.Update(restaurant);
             }
             catch (Exception e)
             {

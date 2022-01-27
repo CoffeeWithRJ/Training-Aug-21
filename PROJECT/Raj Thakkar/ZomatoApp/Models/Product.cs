@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZomatoApp.Models
 {
@@ -13,5 +12,9 @@ namespace ZomatoApp.Models
         public string ProductImage { get; set; }
         public int Categoryid { get; set; }
         public int RestaurantId { get; set; }
+
+
+        [ForeignKey("RestaurantId")]
+        public Restaurant Restaurant { get; set; }
     }
 }

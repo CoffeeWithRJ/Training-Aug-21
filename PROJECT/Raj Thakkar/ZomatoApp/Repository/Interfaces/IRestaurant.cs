@@ -8,6 +8,6 @@ namespace ZomatoApp.Repository.Interfaces
 {
     public interface IRestaurant : GenericInterface<Restaurant>
     {
-
+        public IEnumerable<Restaurant> GetRestaurants();
     }
 }

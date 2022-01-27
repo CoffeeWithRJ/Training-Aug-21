@@ -43,11 +43,12 @@ namespace ZomatoApp
     .AllowAnyHeader();
                 });
             });
-            
+
             //services.AddDbContext<ZomatoApp_ProjectContext>(options => options.UseSqlServer("Server=PC0610\\MSSQL2019;Database=WebAPIZomato;Integrated Security=True"));
             // For Entity Framework  
             services.AddDbContext<ZomatoApp_ProjectContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ZomatoApp")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             //AutoMapper
             services.AddAutoMapper(typeof(Startup));
 

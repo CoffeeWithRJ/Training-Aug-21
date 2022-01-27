@@ -32,5 +32,10 @@ namespace ZomatoApp.Repository
 
         return records;
     }
-}
+
+        public IEnumerable<Restaurant> GetRestaurants()
+        {
+            return context.Restaurants.Include(x => x.Products);
+        }
+    }
 }

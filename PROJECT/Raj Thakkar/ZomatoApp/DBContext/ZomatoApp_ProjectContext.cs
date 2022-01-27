@@ -189,6 +189,7 @@ namespace ZomatoApp.DBContext
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("Product");
+                
 
                 entity.Property(e => e.ProductImage)
                     .IsRequired()
@@ -232,6 +233,11 @@ namespace ZomatoApp.DBContext
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
+
+                //entity.HasMany(d => d.Products)
+                //    .HasForeignKey(d => d.RestaurantId)
+                //    .OnDelete(DeleteBehavior.Restrict)
+                //    .HasConstraintName("FK_Product_Restaurant");
             });
 
             modelBuilder.Entity<UserSignup>(entity =>
