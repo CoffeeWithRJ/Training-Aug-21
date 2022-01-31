@@ -24,9 +24,10 @@ if(localStorage.Restaurant){
 else{
 
 
+
     $.getJSON("../JSON/Restaurant.json",(res)=>{
-        
-        $.each(res.restaurant,(index,element)=>{
+
+            $.each(res.restaurant,(index,element)=>{
             $('#Restaurant_Card').append(` <div class="col"><div class="card  h-100">
             <img class="card__image " src=${element.imgSrc} alt="/" id=${element.id}>
             <div class="card__info ">
@@ -54,6 +55,7 @@ else{
 function search(){
     var searchInput = $("#search_value").val();
     console.log(searchInput)
+
     $.getJSON("../JSON/Restaurant.json",(res)=>{
         
             $(res.restaurant).filter((index,element)=>{
